@@ -7,6 +7,7 @@ import { PATH_DASHBOARD } from '@/routes/paths'
 import type { Test } from '@/types'
 import { DifficultyBadge } from './DifficultyBadge'
 import { StatusBadge } from './StatusBadge'
+import { TestsCardList } from './TestsCardList'
 
 /**
  * Expiry is the column people scan for urgency, so a past date is called out as
@@ -145,6 +146,15 @@ export function TestsTable({
       minWidthClassName="min-w-3xl"
       itemNoun="tests"
       footerNote={footerNote}
+      /* Below `md` the same page of rows renders as cards — the grid needs
+         ~768px before it stops being a sideways scroll. */
+      renderCards={(rows) => (
+        <TestsCardList
+          tests={rows}
+          onDelete={onDelete}
+          renderExpiry={(test) => <ExpiryCell test={test} />}
+        />
+      )}
     />
   )
 }

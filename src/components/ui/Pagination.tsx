@@ -29,7 +29,7 @@ export function Pagination({ page, pageCount, onPageChange }: PaginationProps) {
   if (pageCount <= 1) return null
 
   return (
-    <nav aria-label="Pagination" className="flex items-center gap-1">
+    <nav aria-label="Pagination" className="flex flex-wrap items-center justify-center gap-1">
       <Button
         variant="secondary"
         size="sm"

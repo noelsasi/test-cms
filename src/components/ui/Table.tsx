@@ -52,6 +52,12 @@ interface TableProps<T> {
   itemNoun?: string
   /** Extra content for the footer bar, shown beside the summary. */
   footerNote?: ReactNode
+  /**
+   * Narrow-screen alternative to the table grid. When given, the `<table>` is
+   * hidden below `md` and this renders the same page of rows instead — so
+   * pagination, loading and empty states stay owned by one component.
+   */
+  renderCards?: (rows: T[]) => ReactNode
 }
 
 export function Table<T>({ pagination = false, ...props }: TableProps<T>) {
@@ -125,6 +131,7 @@ function TableView<T>({
   onRowClick,
   className,
   minWidthClassName = 'min-w-3xl',
+  renderCards,
 }: Omit<TableProps<T>, 'pagination' | 'itemNoun' | 'footerNote'>) {
   const shell = cn(
     'overflow-x-auto rounded-[var(--radius-card)] border border-line bg-surface',
@@ -144,47 +151,84 @@ function TableView<T>({
     return <div className={cn(shell, 'border-dashed')}>{emptyState}</div>
   }
 
+  if (renderCards) {
+    return (
+      <>
+        <div className="md:hidden">{renderCards(rows)}</div>
+        <div className={cn(shell, 'hidden md:block')}>
+          <TableGrid
+            columns={columns}
+            rows={rows}
+            getRowId={getRowId}
+            onRowClick={onRowClick}
+            minWidthClassName={minWidthClassName}
+          />
+        </div>
+      </>
+    )
+  }
+
   return (
     <div className={shell}>
-      <table className={cn('w-full border-collapse text-sm', minWidthClassName)}>
-        <thead className="bg-canvas/70">
-          <tr className="border-b border-line text-left">
-            {columns.map((column) => (
-              <th
-                key={column.key}
-                scope="col"
-                className={cn(
-                  'px-5 py-3 text-xs font-semibold tracking-wider text-ink-500 uppercase',
-                  column.headerClassName,
-                )}
-              >
-                {column.header}
-              </th>
-            ))}
-          </tr>
-        </thead>
-        <tbody>
-          {rows.map((row) => (
-            <tr
-              key={getRowId(row)}
-              onClick={onRowClick ? () => onRowClick(row) : undefined}
+      <TableGrid
+        columns={columns}
+        rows={rows}
+        getRowId={getRowId}
+        onRowClick={onRowClick}
+        minWidthClassName={minWidthClassName}
+      />
+    </div>
+  )
+}
+
+function TableGrid<T>({
+  columns,
+  rows,
+  getRowId,
+  onRowClick,
+  minWidthClassName,
+}: Pick<TableProps<T>, 'columns' | 'rows' | 'getRowId' | 'onRowClick'> & {
+  minWidthClassName: string
+}) {
+  return (
+    <table className={cn('w-full border-collapse text-sm', minWidthClassName)}>
+      <thead className="bg-canvas/70">
+        <tr className="border-b border-line text-left">
+          {columns.map((column) => (
+            <th
+              key={column.key}
+              scope="col"
               className={cn(
-                'border-b border-line/70 transition-colors last:border-0 hover:bg-canvas/80',
-                onRowClick && 'cursor-pointer',
+                'relative px-5 py-3 text-xs font-semibold tracking-wider text-ink-500 uppercase',
+                column.headerClassName,
               )}
             >
-              {columns.map((column) => (
-                <td
-                  key={column.key}
-                  className={cn('px-5 py-3.5 align-middle text-ink-700', column.cellClassName)}
-                >
-                  {column.render(row)}
-                </td>
-              ))}
-            </tr>
+              {column.header}
+            </th>
           ))}
-        </tbody>
-      </table>
-    </div>
+        </tr>
+      </thead>
+      <tbody>
+        {rows.map((row) => (
+          <tr
+            key={getRowId(row)}
+            onClick={onRowClick ? () => onRowClick(row) : undefined}
+            className={cn(
+              'border-b border-line/70 transition-colors last:border-0 hover:bg-canvas/80',
+              onRowClick && 'cursor-pointer',
+            )}
+          >
+            {columns.map((column) => (
+              <td
+                key={column.key}
+                className={cn('px-5 py-3.5 align-middle text-ink-700', column.cellClassName)}
+              >
+                {column.render(row)}
+              </td>
+            ))}
+          </tr>
+        ))}
+      </tbody>
+    </table>
   )
 }
