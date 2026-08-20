@@ -6,7 +6,9 @@ export const PATH_AUTH = {
 
 export const PATH_DASHBOARD = {
   root: '/dashboard',
+  tracking: '/tracking',
   tests: {
+    root: ROOT_TESTS,
     create: `${ROOT_TESTS}/new`,
     edit: (id: string) => `${ROOT_TESTS}/${id}/edit`,
     questions: (id: string) => `${ROOT_TESTS}/${id}/questions`,
