@@ -68,10 +68,21 @@ Two things worth flagging, both verified against the live staging API:
 - `GET /tests` returns `subject` and `topics` as **display names**, while
   `POST`/`PUT` expect **UUIDs**. Edit prefill has to map names back to ids.
 
+- The API sends **no `Access-Control-Allow-Origin`** header for any origin,
+  so a browser blocks every direct cross-origin call to it. Both environments
+  therefore request a same-origin `/api` path and let a server-side proxy
+  forward it, where CORS does not apply — Vite's `server.proxy` in dev, and the
+  rewrite in `vercel.json` in production. If the API ever sends proper CORS
+  headers, `lib/env.ts` can use the absolute URL directly and both proxies can
+  go away.
+
 Auth is a JWT in `Authorization: Bearer <token>`, attached centrally in
 `app/baseApi.ts`. A 401 clears the stored session and redirects to login.
 
-## Build status
+## Deployment
 
-Scaffolding and conventions are in place; the five screens are being
-implemented in sequence.
+Deployed on Vercel as a static build. `vercel.json` does two things:
+
+- proxies `/api/*` to the staging API, working around the missing CORS headers
+- rewrites all other paths to `index.html`, so deep links like
+  `/tests/:id/edit` survive a refresh
