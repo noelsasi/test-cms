@@ -13,12 +13,17 @@ if (!rawBaseUrl) {
 const isDev = import.meta.env.DEV
 
 /**
- * In dev we call the Vite proxy at a same-origin path, because the staging API
- * returns no CORS headers for localhost. Builds use the absolute URL.
+ * The staging API returns no `access-control-allow-origin`, so a browser blocks
+ * any direct cross-origin call to it. Both environments therefore talk to a
+ * same-origin `/api` path and let a server-side proxy forward the request,
+ * where CORS does not apply: Vite's `server.proxy` in dev, and the rewrite in
+ * `vercel.json` once deployed.
+ *
+ * Only the path is kept, so the request stays on the current origin. If the API
+ * ever sends proper CORS headers, dropping this and using `rawBaseUrl` directly
+ * is all that's needed.
  */
-const apiBaseUrl = isDev
-  ? new URL(rawBaseUrl).pathname.replace(/\/$/, '')
-  : rawBaseUrl.replace(/\/$/, '')
+const apiBaseUrl = new URL(rawBaseUrl).pathname.replace(/\/$/, '')
 
 export const env = {
   apiBaseUrl,
