@@ -7,12 +7,14 @@ interface NavItem {
   label: string
   to: string
   icon: 'dashboard' | 'create' | 'tracking'
+  /** Shown for parity with the Figma, but outside this task's five screens. */
+  isPlanned?: boolean
 }
 
 const NAV_ITEMS: NavItem[] = [
   { label: 'Dashboard', to: PATH_DASHBOARD.root, icon: 'dashboard' },
   { label: 'Test Creation', to: PATH_DASHBOARD.tests.root, icon: 'create' },
-  { label: 'Test Tracking', to: PATH_DASHBOARD.tracking, icon: 'tracking' },
+  { label: 'Test Tracking', to: PATH_DASHBOARD.tracking, icon: 'tracking', isPlanned: true },
 ]
 
 /** Inline so the shell carries no icon-library dependency. */
@@ -88,11 +90,16 @@ export function Sidebar({
         )}
       >
         {/* Keep a brand anchor when the wordmark no longer fits. */}
-        <Logo className={cn('text-2xl', isCollapsed && 'lg:hidden')} />
+        <Logo className={cn('h-8', isCollapsed && 'lg:hidden')} />
         {isCollapsed && (
-          <span className="hidden text-xl font-extrabold text-link lg:block" aria-label="PrepRoute">
-            P
-          </span>
+          /* The nib mark stands in for the wordmark once the rail narrows. */
+          <img
+            src="/favicon.png"
+            alt="PrepRoute"
+            width={512}
+            height={512}
+            className="hidden size-8 object-contain lg:block"
+          />
         )}
         <button
           type="button"
@@ -136,29 +143,46 @@ export function Sidebar({
       </div>
 
       <nav className="flex flex-col gap-1 py-4">
-        {NAV_ITEMS.map((item) => (
-          <NavLink
-            key={item.to}
-            to={item.to}
-            /* `end` on Dashboard only, so nested test routes keep Test Creation active. */
-            end={item.to === PATH_DASHBOARD.root}
-            /* The label is hidden when collapsed, so the icon needs a name. */
-            title={item.label}
-            className={({ isActive }) =>
-              cn(
-                'relative flex items-center gap-3 py-3 text-sm font-medium transition-colors',
-                'px-6',
+        {NAV_ITEMS.map((item) =>
+          /* Rendered inert rather than linked — the route doesn't exist, and a
+             nav item that lands on "not found" reads worse than a disabled one. */
+          item.isPlanned ? (
+            <span
+              key={item.to}
+              title={`${item.label} — coming soon`}
+              aria-disabled
+              className={cn(
+                'relative flex cursor-not-allowed items-center gap-3 px-6 py-3 text-sm font-medium text-ink-400',
                 isCollapsed && 'lg:justify-center lg:px-0',
-                isActive
-                  ? 'bg-brand-50 text-brand-600 before:absolute before:inset-y-0 before:left-0 before:w-1 before:rounded-r before:bg-brand-600'
-                  : 'text-ink-500 hover:bg-brand-50/60 hover:text-ink-700',
-              )
-            }
-          >
-            <NavIcon name={item.icon} />
-            <span className={cn(isCollapsed && 'lg:hidden')}>{item.label}</span>
-          </NavLink>
-        ))}
+              )}
+            >
+              <NavIcon name={item.icon} />
+              <span className={cn(isCollapsed && 'lg:hidden')}>{item.label}</span>
+            </span>
+          ) : (
+            <NavLink
+              key={item.to}
+              to={item.to}
+              /* `end` on Dashboard only, so nested test routes keep Test Creation active. */
+              end={item.to === PATH_DASHBOARD.root}
+              /* The label is hidden when collapsed, so the icon needs a name. */
+              title={item.label}
+              className={({ isActive }) =>
+                cn(
+                  'relative flex items-center gap-3 py-3 text-sm font-medium transition-colors',
+                  'px-6',
+                  isCollapsed && 'lg:justify-center lg:px-0',
+                  isActive
+                    ? 'bg-brand-50 text-brand-600 before:absolute before:inset-y-0 before:left-0 before:w-1 before:rounded-r before:bg-brand-600'
+                    : 'text-ink-500 hover:bg-brand-50/60 hover:text-ink-700',
+                )
+              }
+            >
+              <NavIcon name={item.icon} />
+              <span className={cn(isCollapsed && 'lg:hidden')}>{item.label}</span>
+            </NavLink>
+          ),
+        )}
       </nav>
     </aside>
   )

@@ -16,4 +16,4 @@ export const PATH_DASHBOARD = {
   },
 }
 
-export const PATH_AFTER_LOGIN = PATH_DASHBOARD.tests.root
+export const PATH_AFTER_LOGIN = PATH_DASHBOARD.root

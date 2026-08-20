@@ -1,7 +1,7 @@
 import type { Test } from '@/types'
 import { effectiveStatus, questionCount } from './dashboardMetrics'
 
-export interface TopicCoverage {
+interface TopicCoverage {
   name: string
   tests: number
   questions: number

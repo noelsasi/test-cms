@@ -4,7 +4,6 @@
  */
 export { LoginForm } from './LoginForm'
 export { LoginIllustration } from './LoginIllustration'
-export { useLoginMutation } from './authApi'
 export {
   authReducer,
   sessionStarted,

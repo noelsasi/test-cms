@@ -8,13 +8,5 @@ export { BreakdownBar, type BreakdownSegment } from './BreakdownBar'
 export { CoveragePanel } from './CoveragePanel'
 export { DifficultyStats } from './DifficultyStats'
 export { DashboardSkeleton } from './DashboardSkeleton'
-export { buildSubjectCoverage, type SubjectCoverage, type TopicCoverage } from './coverage'
-export {
-  buildDashboardMetrics,
-  effectiveStatus,
-  questionCount,
-  normalizeDifficulty,
-  type DashboardMetrics,
-  type DifficultyLevel,
-  type DifficultyStat,
-} from './dashboardMetrics'
+export { buildSubjectCoverage } from './coverage'
+export { buildDashboardMetrics } from './dashboardMetrics'

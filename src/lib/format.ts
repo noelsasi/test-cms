@@ -7,11 +7,6 @@ export function formatDate(iso: string | null): string {
   return date.toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' })
 }
 
-/** Marking-scheme values read better with an explicit sign: +5, -1, +0. */
-export function formatSignedMarks(value: number): string {
-  return value > 0 ? `+${value}` : String(value)
-}
-
 export function formatDuration(minutes: number): string {
   if (minutes < 60) return `${minutes} Min`
   const hours = Math.floor(minutes / 60)

@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom'
 import { cn } from '@/lib/cn'
 
-export type StatTone = 'brand' | 'success' | 'amber' | 'ink'
+type StatTone = 'brand' | 'success' | 'amber' | 'ink'
 
 /**
  * Tone drives only the icon chip — the number itself stays ink-900 in every
@@ -14,7 +14,7 @@ const TONES: Record<StatTone, string> = {
   ink: 'bg-ink-400/10 text-ink-500',
 }
 
-export type StatIcon = 'tests' | 'live' | 'scheduled' | 'questions' | 'progress'
+type StatIcon = 'tests' | 'live' | 'scheduled' | 'questions' | 'progress'
 
 function Icon({ name }: { name: StatIcon }) {
   const common = {

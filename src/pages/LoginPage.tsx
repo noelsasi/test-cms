@@ -18,7 +18,7 @@ export default function LoginPage() {
 
       <div className="flex items-center justify-center rounded-[var(--radius-card)] border border-brand-200 bg-surface px-6 py-12 sm:px-12">
         <div className="w-full max-w-md">
-          <Logo />
+          <Logo className="h-10" />
 
           <h1 className="mt-10 text-2xl font-bold text-ink-900">Login</h1>
           <p className="mt-3 text-sm text-ink-500">Use your company provided Login credentials</p>

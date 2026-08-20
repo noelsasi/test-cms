@@ -1,6 +1,6 @@
 import { cn } from '@/lib/cn'
 
-export interface TabItem<T extends string> {
+interface TabItem<T extends string> {
   value: T
   label: string
 }

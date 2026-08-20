@@ -1,7 +1,7 @@
 import { baseApi } from '@/app/baseApi'
 import type { ApiEnvelope, LoginResponse } from '@/types'
 
-export interface LoginCredentials {
+interface LoginCredentials {
   userId: string
   password: string
 }

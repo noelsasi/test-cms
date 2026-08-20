@@ -1,7 +1,7 @@
 import { useId, type Ref, type SelectHTMLAttributes } from 'react'
 import { cn } from '@/lib/cn'
 
-export interface SelectOption {
+interface SelectOption {
   value: string
   label: string
 }

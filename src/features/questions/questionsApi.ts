@@ -35,17 +35,8 @@ export const questionsApi = baseApi.injectEndpoints({
       transformResponse: (res: ApiEnvelope<Question>) => res.data,
       invalidatesTags: ['Question'],
     }),
-
-    deleteQuestion: builder.mutation<void, string>({
-      query: (id) => ({ url: `/questions/${id}`, method: 'DELETE' }),
-      invalidatesTags: ['Question'],
-    }),
   }),
 })
 
-export const {
-  useGetQuestionsByIdsQuery,
-  useCreateQuestionsMutation,
-  useUpdateQuestionMutation,
-  useDeleteQuestionMutation,
-} = questionsApi
+export const { useGetQuestionsByIdsQuery, useCreateQuestionsMutation, useUpdateQuestionMutation } =
+  questionsApi

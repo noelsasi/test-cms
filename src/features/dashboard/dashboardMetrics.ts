@@ -1,7 +1,7 @@
 import type { Difficulty, Test, TestStatus } from '@/types'
 
 /** Live tests expiring inside this window are called out as time-sensitive. */
-export const EXPIRING_SOON_DAYS = 7
+const EXPIRING_SOON_DAYS = 7
 const DAY_MS = 24 * 60 * 60 * 1000
 
 export type EffectiveStatus = NonNullable<TestStatus>
@@ -21,7 +21,7 @@ export function questionCount(test: Test): number {
  */
 export type DifficultyLevel = 'easy' | 'medium' | 'hard'
 
-export function normalizeDifficulty(difficulty: Difficulty): DifficultyLevel {
+function normalizeDifficulty(difficulty: Difficulty): DifficultyLevel {
   return difficulty === 'difficult' ? 'hard' : difficulty
 }
 
@@ -35,7 +35,7 @@ export interface DifficultyStat {
   share: number
 }
 
-export interface StatusBreakdown {
+interface StatusBreakdown {
   status: EffectiveStatus
   count: number
   /** 0–1, of all tests. Kept as a ratio so the view owns the formatting. */
@@ -43,7 +43,7 @@ export interface StatusBreakdown {
 }
 
 /** A test that can't ship yet: fewer questions saved than it asks for. */
-export interface IncompleteTest {
+interface IncompleteTest {
   test: Test
   authored: number
   target: number

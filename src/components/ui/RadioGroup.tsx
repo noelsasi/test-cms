@@ -1,7 +1,7 @@
 import { useId } from 'react'
 import { cn } from '@/lib/cn'
 
-export interface RadioOption {
+interface RadioOption {
   value: string
   label: string
 }
