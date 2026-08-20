@@ -48,7 +48,7 @@ export default function DashboardLayout() {
   }
 
   return (
-    <div className="flex h-screen overflow-hidden bg-canvas">
+    <div className="flex h-[100dvh] overflow-hidden bg-canvas">
       {isDrawerOpen && (
         <div
           /* Decorative scrim: Escape and the close button carry the semantics. */
@@ -67,7 +67,7 @@ export default function DashboardLayout() {
 
       <div className="flex min-w-0 flex-1 flex-col">
         <Topbar onOpenNav={() => setIsDrawerOpen(true)} />
-        <main className="flex-1 overflow-y-auto px-4 py-5 sm:px-6 lg:px-8 lg:py-6">
+        <main className="min-w-0 flex-1 overflow-y-auto px-4 py-5 sm:px-6 lg:px-8 lg:py-6">
           <Outlet />
         </main>
       </div>

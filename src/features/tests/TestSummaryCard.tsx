@@ -29,7 +29,7 @@ export function TestSummaryCard({ test }: { test: Test }) {
           <SummaryRow label="Sub Topic" values={test.sub_topics ?? []} />
         </div>
 
-        <dl className="flex items-center divide-x divide-line rounded-[var(--radius-field)] border border-line text-sm">
+        <dl className="flex flex-wrap items-center divide-x divide-line rounded-[var(--radius-field)] border border-line text-sm">
           <Stat label={formatDuration(test.total_time)} />
           <Stat label={`${test.total_questions} Q's`} />
           <Stat label={`${test.total_marks} Marks`} />

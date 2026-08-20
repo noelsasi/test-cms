@@ -54,7 +54,7 @@ export default function PreviewPage() {
           { label: 'Preview & Publish' },
         ]}
         actions={
-          <div className="flex items-center gap-3">
+          <div className="flex flex-wrap items-center gap-3">
             <Button variant="secondary" onClick={() => navigate(PATH_DASHBOARD.tests.edit(testId))}>
               Edit Test
             </Button>

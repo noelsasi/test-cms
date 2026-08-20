@@ -11,7 +11,7 @@ export default function LoginPage() {
   if (isAuthenticated) return <Navigate to={PATH_AFTER_LOGIN} replace />
 
   return (
-    <main className="grid min-h-screen grid-cols-1 bg-canvas p-4 lg:grid-cols-2 lg:gap-8 lg:p-8">
+    <main className="grid min-h-[100dvh] grid-cols-1 bg-canvas p-4 lg:grid-cols-2 lg:gap-8 lg:p-8">
       <div className="hidden items-center justify-center lg:flex">
         <LoginIllustration />
       </div>

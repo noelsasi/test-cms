@@ -76,8 +76,8 @@ export function Sidebar({
       /* Below `lg` this is a fixed drawer that slides in; from `lg` it returns
          to a docked column and the transform is irrelevant. */
       className={cn(
-        'fixed inset-y-0 left-0 z-40 flex h-full w-64 flex-col border-r border-line bg-surface transition-transform duration-200',
-        'lg:static lg:z-auto lg:shrink-0 lg:translate-x-0 lg:transition-[width]',
+        'fixed inset-y-0 left-0 z-40 flex h-full w-72 max-w-[80vw] flex-col border-r border-line bg-surface transition-transform duration-200',
+        'lg:static lg:z-auto lg:max-w-none lg:shrink-0 lg:translate-x-0 lg:transition-[width]',
         isDrawerOpen ? 'translate-x-0' : '-translate-x-full',
         isCollapsed ? 'lg:w-20' : 'lg:w-64',
       )}

@@ -154,7 +154,7 @@ function TableView<T>({
                 key={column.key}
                 scope="col"
                 className={cn(
-                  'px-5 py-3 text-xs font-semibold tracking-wider text-ink-500 uppercase',
+                  'relative px-5 py-3 text-xs font-semibold tracking-wider text-ink-500 uppercase',
                   column.headerClassName,
                 )}
               >
