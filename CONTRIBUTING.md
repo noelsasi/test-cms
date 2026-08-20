@@ -19,11 +19,15 @@ src/
 ├── hooks/        # Cross-cutting hooks used by more than one feature
 ├── lib/          # Framework-free helpers (env, storage, formatters, cn)
 ├── pages/        # Route components — compose features, hold no logic
-├── routes/       # Router config and route guards
+├── routes.tsx    # Route table, guard, error boundary — one file
 └── types/        # Shared domain types
 ```
 
 ### Where does a file go?
+
+Prefer a single file over a folder until it actually needs to grow. `routes.tsx`
+holds the route table, guard, and error boundary together because tracing one
+route across six small files costs more than it saves.
 
 - Used by one feature → that feature's folder.
 - Used by two or more features → `components/ui`, `hooks`, or `lib`.
