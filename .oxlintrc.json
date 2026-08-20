@@ -44,15 +44,5 @@
   "ignorePatterns": [
     "dist",
     "node_modules"
-  ],
-  "overrides": [
-    {
-      "files": [
-        "src/routes.tsx"
-      ],
-      "rules": {
-        "react/only-export-components": "off"
-      }
-    }
   ]
 }

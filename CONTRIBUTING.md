@@ -19,15 +19,15 @@ src/
 ├── hooks/        # Cross-cutting hooks used by more than one feature
 ├── lib/          # Framework-free helpers (env, storage, formatters, cn)
 ├── pages/        # Route components — compose features, hold no logic
-├── routes.tsx    # Route table, guard, error boundary — one file
+├── routes/       # Router + auth guard
 └── types/        # Shared domain types
 ```
 
 ### Where does a file go?
 
-Prefer a single file over a folder until it actually needs to grow. `routes.tsx`
-holds the route table, guard, and error boundary together because tracing one
-route across six small files costs more than it saves.
+Split by responsibility, not by rule. Reach for a new file when it holds a
+distinct concern, not to make an existing one shorter — a chain of one-export
+files costs more to follow than it saves.
 
 - Used by one feature → that feature's folder.
 - Used by two or more features → `components/ui`, `hooks`, or `lib`.

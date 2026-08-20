@@ -52,7 +52,7 @@ src/
 ├── features/     # auth, tests, questions, taxonomy
 ├── lib/          # env, storage, formatters, cn
 ├── pages/        # Route components
-├── routes.tsx    # Route table, guard, error boundary
+├── routes/       # Router + auth guard
 └── types/        # Shared domain types
 ```
 
