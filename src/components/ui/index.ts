@@ -1,2 +1,3 @@
 /** Barrel for shared UI primitives. */
-export {}
+export { Spinner } from './Spinner'
+export { PageLoader } from './PageLoader'
