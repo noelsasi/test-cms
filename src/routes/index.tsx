@@ -3,6 +3,7 @@ import { createBrowserRouter, Navigate } from 'react-router-dom'
 import {
   LoginPage,
   DashboardPage,
+  TestsListPage,
   TestFormPage,
   QuestionsPage,
   PreviewPage,
@@ -39,7 +40,7 @@ const router = createBrowserRouter([
       </AuthGuard>
     ),
     children: [
-      { index: true, element: <Navigate to={PATH_AFTER_LOGIN} replace /> },
+      { index: true, element: <TestsListPage /> },
       { path: 'new', element: <TestFormPage /> },
       { path: ':testId/edit', element: <TestFormPage /> },
       { path: ':testId/questions', element: <QuestionsPage /> },

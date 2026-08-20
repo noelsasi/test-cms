@@ -40,7 +40,8 @@ export interface SubTopic {
 }
 
 export type TestType = 'chapterwise' | 'pyq' | 'mock'
-export type Difficulty = 'easy' | 'medium' | 'difficult'
+/** The API returns `hard`; older rows and the forms still carry `difficult`. */
+export type Difficulty = 'easy' | 'medium' | 'difficult' | 'hard'
 /** `null` status behaves as an unsaved draft in the existing data set. */
 export type TestStatus = 'draft' | 'live' | 'scheduled' | 'expired' | 'unpublished' | null
 
@@ -81,6 +82,8 @@ export interface TestPayload {
   total_marks: number
   total_questions: number
   status?: TestStatus
+  /** Written back when the question set changes; read as ids, not objects. */
+  questions?: string[]
 }
 
 export type CorrectOption = 'option1' | 'option2' | 'option3' | 'option4'

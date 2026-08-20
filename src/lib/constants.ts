@@ -2,4 +2,5 @@
 export const STORAGE_KEYS = {
   token: 'preproute.token',
   user: 'preproute.user',
+  sidebarCollapsed: 'preproute.sidebarCollapsed',
 } as const

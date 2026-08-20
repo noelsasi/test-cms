@@ -1,2 +1,5 @@
 /** Barrel for app shell components. */
-export {}
+export { Sidebar } from './Sidebar'
+export { Topbar } from './Topbar'
+export { PageHeader } from './PageHeader'
+export { Breadcrumbs, type Crumb } from './Breadcrumbs'

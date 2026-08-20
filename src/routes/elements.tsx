@@ -13,6 +13,7 @@ function Loadable<P extends object>(Component: ComponentType<P>) {
 
 export const LoginPage = Loadable(lazy(() => import('@/pages/LoginPage')))
 export const DashboardPage = Loadable(lazy(() => import('@/pages/DashboardPage')))
+export const TestsListPage = Loadable(lazy(() => import('@/pages/TestsListPage')))
 export const TestFormPage = Loadable(lazy(() => import('@/pages/TestFormPage')))
 export const QuestionsPage = Loadable(lazy(() => import('@/pages/QuestionsPage')))
 export const PreviewPage = Loadable(lazy(() => import('@/pages/PreviewPage')))

@@ -1,8 +1,8 @@
 import type { ReactNode } from 'react'
 import { Navigate, useLocation } from 'react-router-dom'
-import { STORAGE_KEYS } from '@/lib/constants'
-import { storage } from '@/lib/storage'
+import { useAppSelector } from '@/app/hooks'
 import { PATH_AUTH } from '@/routes/paths'
+import { selectIsAuthenticated } from '../authSlice'
 
 /**
  * Blocks unauthenticated access. Remembers the attempted path so the user
@@ -10,9 +10,9 @@ import { PATH_AUTH } from '@/routes/paths'
  */
 export default function AuthGuard({ children }: { children: ReactNode }) {
   const location = useLocation()
-  const token = storage.get(STORAGE_KEYS.token)
+  const isAuthenticated = useAppSelector(selectIsAuthenticated)
 
-  if (!token) {
+  if (!isAuthenticated) {
     return <Navigate to={PATH_AUTH.login} replace state={{ from: location.pathname }} />
   }
 

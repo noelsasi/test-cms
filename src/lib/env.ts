@@ -10,7 +10,17 @@ if (!rawBaseUrl) {
   )
 }
 
+const isDev = import.meta.env.DEV
+
+/**
+ * In dev we call the Vite proxy at a same-origin path, because the staging API
+ * returns no CORS headers for localhost. Builds use the absolute URL.
+ */
+const apiBaseUrl = isDev
+  ? new URL(rawBaseUrl).pathname.replace(/\/$/, '')
+  : rawBaseUrl.replace(/\/$/, '')
+
 export const env = {
-  apiBaseUrl: rawBaseUrl.replace(/\/$/, ''),
-  isDev: import.meta.env.DEV,
+  apiBaseUrl,
+  isDev,
 } as const
