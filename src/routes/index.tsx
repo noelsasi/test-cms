@@ -1,29 +1,52 @@
-import { Suspense } from 'react'
-import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom'
-import { PageLoader } from '@/components/ui'
-import { ROUTES } from '@/lib/constants'
-import { ProtectedRoute } from './ProtectedRoute'
-import { NotFoundPage, protectedRoutes, publicRoutes } from './routes'
+import { createBrowserRouter, Navigate } from 'react-router-dom'
 
-export function AppRouter() {
-  return (
-    <BrowserRouter>
-      <Suspense fallback={<PageLoader />}>
-        <Routes>
-          {publicRoutes.map(({ path, component: Page }) => (
-            <Route key={path} path={path} element={<Page />} />
-          ))}
+import {
+  LoginPage,
+  DashboardPage,
+  TestFormPage,
+  QuestionsPage,
+  PreviewPage,
+  NotFoundPage,
+} from './elements'
+import { DashboardLayout } from '../layouts'
+import AuthGuard from '../features/auth/guard/AuthGuard'
+import { PATH_AFTER_LOGIN } from './paths'
 
-          <Route element={<ProtectedRoute />}>
-            {protectedRoutes.map(({ path, component: Page }) => (
-              <Route key={path} path={path} element={<Page />} />
-            ))}
-          </Route>
+const router = createBrowserRouter([
+  {
+    path: '/',
+    element: <Navigate to={PATH_AFTER_LOGIN} replace />,
+    index: true,
+  },
+  {
+    path: 'login',
+    element: <LoginPage />,
+  },
+  {
+    path: 'dashboard',
+    element: (
+      <AuthGuard>
+        <DashboardLayout />
+      </AuthGuard>
+    ),
+    children: [{ index: true, element: <DashboardPage /> }],
+  },
+  {
+    path: 'tests',
+    element: (
+      <AuthGuard>
+        <DashboardLayout />
+      </AuthGuard>
+    ),
+    children: [
+      { index: true, element: <Navigate to={PATH_AFTER_LOGIN} replace /> },
+      { path: 'new', element: <TestFormPage /> },
+      { path: ':testId/edit', element: <TestFormPage /> },
+      { path: ':testId/questions', element: <QuestionsPage /> },
+      { path: ':testId/preview', element: <PreviewPage /> },
+    ],
+  },
+  { path: '*', element: <NotFoundPage /> },
+])
 
-          <Route path="/" element={<Navigate to={ROUTES.dashboard} replace />} />
-          <Route path="*" element={<NotFoundPage />} />
-        </Routes>
-      </Suspense>
-    </BrowserRouter>
-  )
-}
+export default router
