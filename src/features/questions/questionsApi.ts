@@ -17,7 +17,15 @@ export const questionsApi = baseApi.injectEndpoints({
         body: { question_ids: questionIds },
       }),
       transformResponse: (res: ApiEnvelope<Question[]>) => res.data,
-      providesTags: ['Question'],
+      // Tagged per question, so editing one does not refetch every other
+      // cached bulk request — only the ones actually holding that question.
+      providesTags: (questions) =>
+        questions
+          ? [
+              ...questions.map(({ id }) => ({ type: 'Question' as const, id })),
+              { type: 'Question', id: 'LIST' },
+            ]
+          : [{ type: 'Question', id: 'LIST' }],
     }),
 
     createQuestions: builder.mutation<Question[], WritableQuestion[]>({
@@ -27,13 +35,14 @@ export const questionsApi = baseApi.injectEndpoints({
         body: { questions },
       }),
       transformResponse: (res: ApiEnvelope<Question[]>) => res.data,
-      invalidatesTags: ['Question'],
+      // A new question belongs to no cached set yet, so only the list is stale.
+      invalidatesTags: [{ type: 'Question', id: 'LIST' }],
     }),
 
     updateQuestion: builder.mutation<Question, { id: string; body: WritableQuestion }>({
       query: ({ id, body }) => ({ url: `/questions/${id}`, method: 'PUT', body }),
       transformResponse: (res: ApiEnvelope<Question>) => res.data,
-      invalidatesTags: ['Question'],
+      invalidatesTags: (_question, _error, { id }) => [{ type: 'Question', id }],
     }),
   }),
 })

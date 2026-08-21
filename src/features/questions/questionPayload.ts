@@ -1,4 +1,4 @@
-import type { QuestionPayload, SubTopic, Topic } from '@/types'
+import type { Question, QuestionPayload, SubTopic, Topic } from '@/types'
 import type { QuestionFormValues } from './questionSchema'
 
 /**
@@ -67,4 +67,33 @@ export function toUpdatePayload(
   lookup: TaxonomyLookup,
 ): WritableQuestion {
   return withoutBlanks(values, lookup)
+}
+
+/** Questions store topic/sub-topic as names; the selects are keyed by id. */
+function idForName(name: string | null, items: { id: string; name: string }[]): string | null {
+  if (!name) return null
+  return items.find((item) => item.name === name)?.id ?? null
+}
+
+/**
+ * The inverse of `withoutBlanks` — turns a saved question back into form
+ * values, re-resolving the stored names into the ids the selects expect.
+ */
+export function questionToFormValues(
+  question: Question,
+  lookup: TaxonomyLookup,
+): QuestionFormValues {
+  return {
+    question: question.question,
+    option1: question.option1,
+    option2: question.option2,
+    option3: question.option3,
+    option4: question.option4,
+    correct_option: question.correct_option,
+    explanation: question.explanation,
+    difficulty: question.difficulty,
+    media_url: question.media_url,
+    topic: idForName(question.topic, lookup.topics),
+    sub_topic: idForName(question.sub_topic, lookup.subTopics),
+  }
 }

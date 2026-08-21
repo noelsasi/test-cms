@@ -1,5 +1,5 @@
 import { lazy, Suspense, type ComponentProps } from 'react'
-import { Spinner } from './Spinner'
+import { Spinner } from '../primitives/Spinner'
 
 const RichTextEditorImpl = lazy(() =>
   import('./RichTextEditorImpl').then((module) => ({ default: module.RichTextEditorImpl })),

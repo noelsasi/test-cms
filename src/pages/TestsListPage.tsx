@@ -1,7 +1,7 @@
 import { useMemo, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { PageHeader } from '@/components/layout'
-import { Alert, Button, ConfirmDialog, EmptyState, Input } from '@/components/ui'
+import { Alert, Button, ConfirmDialog, EmptyState, Input, useToast } from '@/components/ui'
 import { StatusIcon, TestsTable, useDeleteTestMutation, useGetTestsQuery } from '@/features/tests'
 import { getApiErrorMessage } from '@/lib/apiError'
 import { PATH_DASHBOARD } from '@/routes/paths'
@@ -21,12 +21,16 @@ export default function TestsListPage() {
   const [status, setStatus] = useState<TestStatus | 'all'>('all')
   const [pendingDelete, setPendingDelete] = useState<Test | null>(null)
   const [deleteTest, deleteState] = useDeleteTestMutation()
+  const { showToast } = useToast()
 
   async function handleConfirmDelete() {
     if (!pendingDelete) return
 
     try {
       await deleteTest(pendingDelete.id).unwrap()
+      // Named, because a filtered or paginated table may not have been showing
+      // the deleted row in the first place.
+      showToast(`"${pendingDelete.name}" was deleted.`)
       setPendingDelete(null)
     } catch {
       // Keep the dialog open; the error is surfaced above the table.

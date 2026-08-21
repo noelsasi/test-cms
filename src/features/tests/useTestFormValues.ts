@@ -16,6 +16,8 @@ import { DEFAULT_TEST_VALUES, type TestFormValues } from './testSchema'
 export function useTestFormValues(test: Test | undefined): {
   values: TestFormValues | undefined
   isResolving: boolean
+  /** Names the taxonomy no longer knows — see `testToFormValues`. */
+  unresolved: string[]
 } {
   const { data: subjects = [], isFetching: isFetchingSubjects } = useGetSubjectsQuery(undefined, {
     skip: !test,
@@ -42,15 +44,20 @@ export function useTestFormValues(test: Test | undefined): {
     { skip: topicIds.length === 0 },
   )
 
-  const values = useMemo(() => {
+  const resolved = useMemo(() => {
     if (!test) return undefined
     return testToFormValues(test, subjects, topics, subTopics)
   }, [test, subjects, topics, subTopics])
 
-  if (!test) return { values: DEFAULT_TEST_VALUES, isResolving: false }
+  if (!test) return { values: DEFAULT_TEST_VALUES, isResolving: false, unresolved: [] }
+
+  const isResolving = isFetchingSubjects || isFetchingTopics || isFetchingSubTopics
 
   return {
-    values,
-    isResolving: isFetchingSubjects || isFetchingTopics || isFetchingSubTopics,
+    values: resolved?.values,
+    isResolving,
+    // While a fetch is in flight the lists are incomplete, so every name looks
+    // unresolved — only report once the taxonomy has actually settled.
+    unresolved: isResolving ? [] : (resolved?.unresolved ?? []),
   }
 }

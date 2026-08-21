@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import { PageHeader } from '@/components/layout'
-import { Alert, PageLoader } from '@/components/ui'
+import { Alert, PageLoader, useToast } from '@/components/ui'
 import {
   TestForm,
   useCreateTestMutation,
@@ -16,12 +16,13 @@ import { PATH_DASHBOARD } from '@/routes/paths'
 export default function TestFormPage() {
   const { testId } = useParams<{ testId: string }>()
   const navigate = useNavigate()
+  const { showToast } = useToast()
   const isEdit = Boolean(testId)
 
   const { data: test, isLoading: isLoadingTest } = useGetTestQuery(testId ?? '', { skip: !isEdit })
   const [createTest, createState] = useCreateTestMutation()
   const [updateTest, updateState] = useUpdateTestMutation()
-  const { values, isResolving } = useTestFormValues(test)
+  const { values, isResolving, unresolved } = useTestFormValues(test)
   // Both buttons drive the same mutations, so the pending flag says which one
   // to spin rather than lighting up the whole footer.
   const [pendingAction, setPendingAction] = useState<'next' | 'draft' | null>(null)
@@ -39,6 +40,8 @@ export default function TestFormPage() {
     try {
       const result = await saveTest(values)
       navigate(PATH_DASHBOARD.tests.questions(result.id))
+    } catch {
+      // Surfaced from the mutations' `error` state below.
     } finally {
       setPendingAction(null)
     }
@@ -49,7 +52,9 @@ export default function TestFormPage() {
     setPendingAction('draft')
     try {
       await saveTest(values)
-      navigate(PATH_DASHBOARD.tests.root)
+      showToast('Draft saved successfully.')
+    } catch {
+      // Surfaced from the mutations' `error` state below.
     } finally {
       setPendingAction(null)
     }
@@ -65,6 +70,14 @@ export default function TestFormPage() {
           { label: isEdit ? 'Edit Test' : 'Create Test' },
         ]}
       />
+
+      {unresolved.length > 0 && (
+        <Alert className="mb-4">
+          {unresolved.length === 1 ? 'This topic is' : 'These topics are'} no longer in the subject
+          list and cannot be saved back: {unresolved.join(', ')}. Saving will remove{' '}
+          {unresolved.length === 1 ? 'it' : 'them'} from the test.
+        </Alert>
+      )}
 
       {isEdit && !test ? (
         <Alert>That test could not be loaded.</Alert>
