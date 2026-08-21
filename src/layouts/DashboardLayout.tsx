@@ -48,7 +48,7 @@ export default function DashboardLayout() {
   }
 
   return (
-    <div className="flex h-[100dvh] overflow-hidden bg-canvas">
+    <div className="flex h-dvh overflow-hidden bg-canvas">
       {isDrawerOpen && (
         <div
           /* Decorative scrim: Escape and the close button carry the semantics. */

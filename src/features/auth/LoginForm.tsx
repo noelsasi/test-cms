@@ -62,9 +62,11 @@ export function LoginForm() {
         {...register('password')}
       />
 
-      <a href="#" className="-mt-2 text-sm text-link hover:underline">
+      {/* No recovery flow on the API yet — shown for parity with the Figma,
+          but inert rather than a link that navigates nowhere. */}
+      <span className="-mt-2 text-sm text-ink-400" title="Contact your administrator to reset it">
         Forgot password?
-      </a>
+      </span>
 
       <Button type="submit" size="lg" fullWidth isLoading={isLoading}>
         {isLoading ? 'Signing in…' : 'Login'}

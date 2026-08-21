@@ -1,8 +1,8 @@
 import type { ReactNode } from 'react'
 import { cn } from '@/lib/cn'
-import { usePagination } from '@/hooks/usePagination'
+import { usePagination } from '@/lib/usePagination'
 import { Pagination } from './Pagination'
-import { Spinner } from './Spinner'
+import { Spinner } from '../primitives/Spinner'
 
 export interface Column<T> {
   /** Stable identity for the column — also the React key. */

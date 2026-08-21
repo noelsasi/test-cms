@@ -26,6 +26,9 @@
   --color-success: #16a34a; /* completed question ticks */
   --color-navy: #111a3d; /* "Chapter Wise" badge */
 
+  /* Deeper than --color-success so white text on a solid toast clears AA. */
+  --color-success-solid: #15803d;
+
   --radius-field: 10px;
   --radius-card: 14px;
 
@@ -43,4 +46,27 @@ body {
   color: var(--color-ink-700);
   font-family: var(--font-sans);
   -webkit-font-smoothing: antialiased;
+}
+
+/* Toasts arrive from below the fold, so the motion reads as "something new"
+   rather than a flash. Respects a reduced-motion preference. */
+@keyframes toast-in {
+  from {
+    opacity: 0;
+    transform: translateY(0.75rem) scale(0.97);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@theme {
+  --animate-toast-in: toast-in 200ms ease-out;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-toast-in {
+    animation: none;
+  }
 }

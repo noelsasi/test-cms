@@ -1,3 +1,4 @@
+import { useEffect } from 'react'
 import { Controller, useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import {
@@ -63,6 +64,20 @@ export function TestForm({
 
   const subjectId = watch('subject')
   const topicIds = watch('topics')
+
+  /**
+   * Total marks is correct marks x number of questions — the questions screen
+   * recomputes it that way as questions are saved, so the form derives it
+   * rather than letting the two disagree.
+   */
+  const correctMarks = watch('correct_marks')
+  const totalQuestions = watch('total_questions')
+  const derivedTotalMarks = (Number(correctMarks) || 0) * (Number(totalQuestions) || 0)
+
+  // Kept in the form state so submit sends the derived figure, not a stale one.
+  useEffect(() => {
+    setValue('total_marks', derivedTotalMarks, { shouldValidate: false })
+  }, [derivedTotalMarks, setValue])
 
   const { data: subjects = [], isLoading: isLoadingSubjects } = useGetSubjectsQuery()
   const { data: topics = [] } = useGetTopicsBySubjectQuery(subjectId, { skip: !subjectId })
@@ -241,19 +256,19 @@ export function TestForm({
               />
             )}
           />
-          <Controller
-            control={control}
-            name="total_marks"
-            render={({ field }) => (
-              <Input
-                label="Total Marks"
-                type="number"
-                placeholder="Ex:250 Marks"
-                error={errors.total_marks?.message}
-                value={field.value || ''}
-                onChange={(event) => field.onChange(Number(event.target.value))}
-              />
-            )}
+          {/* Derived, not entered: the questions screen recomputes total_marks
+              from the saved question count on every add, so a typed value would
+              be silently replaced. Shown read-only to keep the number visible. */}
+          <Input
+            label="Total Marks"
+            type="number"
+            readOnly
+            tabIndex={-1}
+            className="cursor-not-allowed bg-brand-50 text-ink-500"
+            title="Calculated from correct marks x number of questions"
+            error={errors.total_marks?.message}
+            value={derivedTotalMarks || ''}
+            onChange={() => {}}
           />
         </div>
       </div>

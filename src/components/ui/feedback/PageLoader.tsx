@@ -1,4 +1,4 @@
-import { Spinner } from './Spinner'
+import { Spinner } from '../primitives/Spinner'
 
 /**
  * Suspense fallback for lazily loaded routes. Sized to fill the viewport so

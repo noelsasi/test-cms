@@ -1,5 +1,5 @@
 import { useEffect } from 'react'
-import { Button } from './Button'
+import { Button } from '../primitives/Button'
 
 interface ConfirmDialogProps {
   title: string
@@ -24,10 +24,17 @@ export function ConfirmDialog({
 }: ConfirmDialogProps) {
   useEffect(() => {
     function handleKeyDown(event: KeyboardEvent) {
-      if (event.key === 'Escape') onCancel()
+      if (event.key !== 'Escape') return
+      // The dialog sits above everything else, so it consumes the key rather
+      // than letting it also dismiss whatever it opened over (the nav drawer).
+      // Both listeners sit on `document`, so only stopping *immediate*
+      // propagation keeps the other one from running too.
+      event.stopImmediatePropagation()
+      onCancel()
     }
-    document.addEventListener('keydown', handleKeyDown)
-    return () => document.removeEventListener('keydown', handleKeyDown)
+    // Capture phase, so this runs before listeners bound lower in the tree.
+    document.addEventListener('keydown', handleKeyDown, true)
+    return () => document.removeEventListener('keydown', handleKeyDown, true)
   }, [onCancel])
 
   return (
